@@ -18,10 +18,11 @@ const array = [
 ];
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.status(200).send("Hello World!");
 });
 
 app.get("/json", (req, res) => {
+  res.status(200);
   res.json(array);
 });
 
@@ -32,7 +33,16 @@ app.get("/params", (req, res) => {
     (car) => car.name.includes(name) && car.color.includes(color)
   );
 
-  res.json(filteredArr);
+  if (parseInt(name) || parseInt(color)) {
+    res.sendStatus(400);
+  }
+
+  if (filteredArr.length === 0) {
+    res.sendStatus(404);
+  } else {
+    res.status(200);
+    res.json(filteredArr);
+  }
 });
 
 app.listen("3000", () => {
